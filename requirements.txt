@@ -12,8 +12,11 @@ daphne==4.0.0
 # CORS (for Flutter frontend)
 django-cors-headers==4.3.0
 
-# Image handling (for profile pictures) - Updated for Python 3.13 compatibility
+# Image handling (for profile pictures)
 Pillow==10.4.0
 
-# Production Server (Render.com needs this)
+# Production Server
 gunicorn==21.2.0
+
+# Python 3.13 compatibility - CRITICAL for pkg_resources
+setuptools==75.8.0
