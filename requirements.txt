@@ -1,0 +1,19 @@
+# Core Django
+Django==5.1.1
+
+# REST API
+djangorestframework==3.14.0
+djangorestframework-simplejwt==5.3.0
+
+# WebSockets & Async (for Chat & Calls)
+channels==4.0.0
+daphne==4.0.0
+
+# CORS (for Flutter frontend)
+django-cors-headers==4.3.0
+
+# Image handling (for profile pictures)
+Pillow==10.1.0
+
+# Production Server (Render.com needs this)
+gunicorn==21.2.0
