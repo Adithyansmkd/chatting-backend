@@ -25,16 +25,13 @@ SECRET_KEY = 'django-insecure-e)-eufxa4yo5vfz2a0%%v$^xq2&h-4tc)bimp+*kx$69av-1)5
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['localhost', 'https://chatting-backend-3mve.onrender.com','*',]
+ALLOWED_HOSTS = ['localhost', '127.0.0.1', 'chatting-backend-3mve.onrender.com', '*']
 
 # CORS Configuration
 CORS_ALLOWED_ORIGINS = [
     "http://localhost:8000",
     "http://127.0.0.1:8000",
-    "http://192.168.0.101:8000",
-    "http://localhost",
     "https://chatting-backend-3mve.onrender.com",
-    
 ]
 CORS_ALLOW_CREDENTIALS = True
 
