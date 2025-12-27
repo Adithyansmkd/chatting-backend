@@ -66,14 +66,15 @@ INSTALLED_APPS = [
 ]
 
 MIDDLEWARE = [
-    'django.middleware.security.SecurityMiddleware',
-    'django.contrib.sessions.middleware.SessionMiddleware',
-    'corsheaders.middleware.CorsMiddleware',  # CORS middleware should be as high as possible
+    'corsheaders.middleware.CorsMiddleware',  # CORS for WebSocket
     'django.middleware.common.CommonMiddleware',
-    'django.middleware.csrf.CsrfViewMiddleware',
-    'django.contrib.auth.middleware.AuthenticationMiddleware',
-    'django.contrib.messages.middleware.MessageMiddleware',
-    'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    # Removed sync-only middleware that breaks ASGI:
+    # - SecurityMiddleware (causes coroutine issues)
+    # - SessionMiddleware (not needed for API)
+    # - CsrfViewMiddleware (not needed for API with JWT)
+    # - AuthenticationMiddleware (using JWT tokens instead)
+    # - MessagesMiddleware (not needed for API)
+    # - ClickjackingMiddleware (not needed for API)
 ]
 
 ROOT_URLCONF = 'chattingarena.urls'
