@@ -27,13 +27,20 @@ DEBUG = True
 
 ALLOWED_HOSTS = ['localhost', '127.0.0.1', 'chatting-backend-3mve.onrender.com', '*']
 
-# CORS Configuration
-CORS_ALLOWED_ORIGINS = [
-    "http://localhost:8000",
-    "http://127.0.0.1:8000",
-    "https://chatting-backend-3mve.onrender.com",
-]
+# CORS Configuration - Allow all for development/testing
+CORS_ALLOW_ALL_ORIGINS = True  # For production, restrict to specific origins
 CORS_ALLOW_CREDENTIALS = True
+CORS_ALLOW_HEADERS = [
+    'accept',
+    'accept-encoding',
+    'authorization',
+    'content-type',
+    'dnt',
+    'origin',
+    'user-agent',
+    'x-csrftoken',
+    'x-requested-with',
+]
 
 
 # Application definition
@@ -93,8 +100,19 @@ ASGI_APPLICATION = 'chattingarena.asgi.application'
 CHANNEL_LAYERS = {
     'default': {
         'BACKEND': 'channels.layers.InMemoryChannelLayer',
+        # For production on Render.com, use Redis:
+        # 'BACKEND': 'channels_redis.core.RedisChannelLayer',
+        # 'CONFIG': {
+        #     "hosts": [os.environ.get('REDIS_URL', 'redis://localhost:6379')],
+        # },
     },
 }
+
+# NOTE: For Render.com production, you need to:
+# 1. Add a Redis instance on Render.com
+# 2. Set REDIS_URL environment variable  
+# 3. Uncomment the Redis backend above
+# For now, InMemoryChannelLayer works for single-instance deployments
 
 
 # Database
