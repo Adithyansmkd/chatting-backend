@@ -66,15 +66,14 @@ INSTALLED_APPS = [
 ]
 
 MIDDLEWARE = [
-    'corsheaders.middleware.CorsMiddleware',  # CORS for WebSocket
+    'corsheaders.middleware.CorsMiddleware',  # CORS must be first
+    'django.middleware.security.SecurityMiddleware',
+    'django.contrib.sessions.middleware.SessionMiddleware', # Required for Admin/Auth
     'django.middleware.common.CommonMiddleware',
-    # Removed sync-only middleware that breaks ASGI:
-    # - SecurityMiddleware (causes coroutine issues)
-    # - SessionMiddleware (not needed for API)
-    # - CsrfViewMiddleware (not needed for API with JWT)
-    # - AuthenticationMiddleware (using JWT tokens instead)
-    # - MessagesMiddleware (not needed for API)
-    # - ClickjackingMiddleware (not needed for API)
+    'django.middleware.csrf.CsrfViewMiddleware',
+    'django.contrib.auth.middleware.AuthenticationMiddleware', # Adds request.user
+    'django.contrib.messages.middleware.MessageMiddleware', # Required for Admin
+    'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
 ROOT_URLCONF = 'chattingarena.urls'
@@ -119,11 +118,17 @@ CHANNEL_LAYERS = {
 # Database
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
 
+import dj_database_url
+
+# Database
+# https://docs.djangoproject.com/en/5.1/ref/settings/#databases
+
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
-    }
+    'default': dj_database_url.config(
+        default=f"sqlite:///{BASE_DIR / 'db.sqlite3'}",
+        conn_max_age=600,
+        conn_health_checks=True,
+    )
 }
 
 
