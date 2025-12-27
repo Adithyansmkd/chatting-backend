@@ -71,6 +71,7 @@ INSTALLED_APPS = [
 MIDDLEWARE = [
     'corsheaders.middleware.CorsMiddleware',  # CORS must be first
     'django.middleware.security.SecurityMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware', # Add Whitenoise for static files
     'django.contrib.sessions.middleware.SessionMiddleware', # Required for Admin/Auth
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -78,6 +79,9 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware', # Required for Admin
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
+
+# CSRF Configuration for Render
+CSRF_TRUSTED_ORIGINS = ['https://chatting-backend-3mve.onrender.com']
 
 ROOT_URLCONF = 'chattingarena.urls'
 
