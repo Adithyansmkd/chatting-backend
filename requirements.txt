@@ -26,3 +26,6 @@ psycopg2-binary>=2.9.10
 
 # Python 3.13 compatibility
 setuptools==75.8.0
+# Cloudinary
+django-cloudinary-storage==0.3.0
+cloudinary==1.44.1

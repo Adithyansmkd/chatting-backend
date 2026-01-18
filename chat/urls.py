@@ -1,5 +1,6 @@
 from django.urls import path
 from . import views
+from . import views_upload
 from .views_conversations import ConversationListView, MarkMessagesReadView
 
 urlpatterns = [
@@ -24,5 +25,6 @@ urlpatterns = [
     path('messages/<slug:room_slug>/', views.RoomMessageListView.as_view(), name='room_messages'),
     
     # Media Upload
-    path('upload/audio/', views.AudioUploadView.as_view(), name='audio_upload'),
+    # Media Upload
+    path('upload/audio/', views_upload.AudioUploadView.as_view(), name='audio_upload'),
 ]

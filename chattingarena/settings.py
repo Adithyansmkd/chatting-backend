@@ -61,6 +61,8 @@ INSTALLED_APPS = [
     'rest_framework',
     'rest_framework.authtoken',
     'corsheaders',
+    'cloudinary_storage',
+    'cloudinary',
     
     # Local apps
     'accounts',
@@ -202,7 +204,11 @@ REST_FRAMEWORK = {
 MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / 'media'
 
-SIMPLE_JWT = {
-    'ACCESS_TOKEN_LIFETIME': timedelta(days=365),
-    'REFRESH_TOKEN_LIFETIME': timedelta(days=365),
+# Cloudinary Configuration
+CLOUDINARY_STORAGE = {
+    'CLOUD_NAME': 'dhnnucmfm',
+    'API_KEY': '632998593497398',
+    'API_SECRET': 'Vkz1BlMu3wnVBkH22JTWY7fuMxA',
 }
+
+DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
