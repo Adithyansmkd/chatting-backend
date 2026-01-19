@@ -19,15 +19,33 @@ if not firebase_admin._apps:
             cred_dict = json.loads(cred_json)
             cred = credentials.Certificate(cred_dict)
             firebase_admin.initialize_app(cred)
-            print("FIREBASE ADMIN: Initialized Successfully")
+            print("FIREBASE ADMIN: Initialized Successfully (Env Var)")
         except Exception as e:
             print(f"FIREBASE ADMIN ERROR: Failed to parse JSON. Error: {e}")
             print(f"JSON Preview: {cred_json[:20]}...") 
     else:
-        print("WARNING: FIREBASE_ADMIN_JSON not found. Notifications will fail.")
+        # Fallback: Check for local file (for local development)
+        # Assuming notifications.py is in accounts/, so root is one level up
+        base_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+        key_path = os.path.join(base_dir, 'firebase_key.json')
+        
+        if os.path.exists(key_path):
+             try:
+                 cred = credentials.Certificate(key_path)
+                 firebase_admin.initialize_app(cred)
+                 print(f"FIREBASE ADMIN: Initialized Successfully (Local File: {key_path})")
+             except Exception as e:
+                 print(f"FIREBASE ADMIN LOCAL FILE ERROR: {e}")
+        else:
+             print("WARNING: FIREBASE_ADMIN_JSON not found AND firebase_key.json not found. Notifications will fail.")
 
 @csrf_exempt
 def send_notification(request):
+    # Health Check (GET) - Verify Firebase Init
+    if request.method == 'GET':
+        status = "Initialized" if firebase_admin._apps else "Not Initialized"
+        return JsonResponse({'firebase_status': status})
+
     if request.method != 'POST':
         return JsonResponse({'error': 'Only POST allowed'}, status=405)
 
