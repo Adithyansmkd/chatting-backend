@@ -1,14 +1,15 @@
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
-from rest_framework.permissions import IsAuthenticated
+from rest_framework.permissions import AllowAny
 from django.core.files.storage import default_storage
 from django.core.files.base import ContentFile
 import os
 import time
 
 class AudioUploadView(APIView):
-    permission_classes = [IsAuthenticated]
+    authentication_classes = [] # Disable token validation
+    permission_classes = [AllowAny]
 
     def post(self, request):
         audio_file = request.FILES.get('audio')
@@ -20,7 +21,12 @@ class AudioUploadView(APIView):
         if not ext:
             ext = '.m4a' # Default for Flutter Sound
             
-        filename = f"voice_notes/audio_{int(time.time())}_{request.user.id}{ext}"
+        # Use a random ID since request.user might be anonymous
+        user_suffix = f"anon_{int(time.time() * 1000)}" 
+        if request.user and request.user.is_authenticated:
+            user_suffix = str(request.user.id)
+            
+        filename = f"voice_notes/audio_{int(time.time())}_{user_suffix}{ext}"
         
         # Save file
         path = default_storage.save(filename, ContentFile(audio_file.read()))

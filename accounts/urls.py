@@ -3,7 +3,9 @@ from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
 from . import views
 from . import views_profile
 from . import views_block
+from . import views_block
 from . import views_firebase
+from . import notifications
 
 urlpatterns = [
     # Authentication
@@ -30,4 +32,7 @@ urlpatterns = [
     
     # Firebase Sync
     path('firebase-sync/', views_firebase.FirebaseSyncView.as_view(), name='firebase_sync'),
+
+    # Notifications (Free relay via Django)
+    path('notifications/send/', notifications.send_notification, name='send_notification'),
 ]

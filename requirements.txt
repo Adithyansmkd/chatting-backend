@@ -29,3 +29,6 @@ setuptools==75.8.0
 # Cloudinary
 django-cloudinary-storage==0.3.0
 cloudinary==1.44.1
+
+# Firebase Admin (For notifications)
+firebase-admin==6.4.0

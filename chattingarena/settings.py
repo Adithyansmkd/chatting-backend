@@ -35,7 +35,7 @@ SECRET_KEY = os.environ.get('SECRET_KEY', 'django-insecure-e)-eufxa4yo5vfz2a0%%v
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = 'RENDER' not in os.environ
 
-ALLOWED_HOSTS = ['localhost', '127.0.0.1', 'chatting-backend-3mve.onrender.com', '*']
+ALLOWED_HOSTS = ['localhost', '127.0.0.1', 'chatting-backend-3mve.onrender.com', '192.168.0.101', '*']
 
 # CORS Configuration - Allow all for development/testing
 CORS_ALLOW_ALL_ORIGINS = True  # For production, restrict to specific origins
