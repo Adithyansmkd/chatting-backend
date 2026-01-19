@@ -91,6 +91,7 @@ def send_notification(request):
                 notification=messaging.AndroidNotification(
                      channel_id='high_importance_channel',
                      default_sound=True,
+                     tag=chat_id, # Groups notifications by Chat ID in System Tray
                 ),
             ),
         )
