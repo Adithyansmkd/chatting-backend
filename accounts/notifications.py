@@ -55,6 +55,7 @@ def send_notification(request):
         receiver_id = data.get('receiver_id')
         title = data.get('title', 'New Message')
         body = data.get('body', 'You have a new message')
+        chat_id = data.get('chat_id', '')
         
         if not receiver_id:
              return JsonResponse({'error': 'receiver_id required'}, status=400)
@@ -82,6 +83,7 @@ def send_notification(request):
             data={
                 'click_action': 'FLUTTER_NOTIFICATION_CLICK',
                 'receiver_id': receiver_id,
+                'chat_id': chat_id,
             },
             token=fcm_token,
             android=messaging.AndroidConfig(
