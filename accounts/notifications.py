@@ -13,9 +13,16 @@ if not firebase_admin._apps:
     # For local testing, we can use a path or skipped if not configured
     cred_json = os.environ.get('FIREBASE_ADMIN_JSON')
     if cred_json:
-        cred_dict = json.loads(cred_json)
-        cred = credentials.Certificate(cred_dict)
-        firebase_admin.initialize_app(cred)
+        try:
+            # Defensive: Strip potentially added quotes from Render env var UI
+            cred_json = cred_json.strip().strip("'").strip('"')
+            cred_dict = json.loads(cred_json)
+            cred = credentials.Certificate(cred_dict)
+            firebase_admin.initialize_app(cred)
+            print("FIREBASE ADMIN: Initialized Successfully")
+        except Exception as e:
+            print(f"FIREBASE ADMIN ERROR: Failed to parse JSON. Error: {e}")
+            print(f"JSON Preview: {cred_json[:20]}...") 
     else:
         print("WARNING: FIREBASE_ADMIN_JSON not found. Notifications will fail.")
 
@@ -25,6 +32,7 @@ def send_notification(request):
         return JsonResponse({'error': 'Only POST allowed'}, status=405)
 
     try:
+        print(f"Notification Request: {request.body.decode('utf-8')}")
         data = json.loads(request.body)
         receiver_id = data.get('receiver_id')
         title = data.get('title', 'New Message')
