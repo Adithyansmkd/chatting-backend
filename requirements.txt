@@ -18,17 +18,6 @@ Pillow==10.4.0
 
 # Production Server
 gunicorn==21.2.0
-whitenoise==6.7.0
-
-# Database (PostgreSQL for Render)
-dj-database-url==2.1.0
-psycopg2-binary>=2.9.10
 
 # Python 3.13 compatibility
 setuptools==75.8.0
-# Cloudinary
-django-cloudinary-storage==0.3.0
-cloudinary==1.44.1
-
-# Firebase Admin (For notifications)
-firebase-admin==6.4.0

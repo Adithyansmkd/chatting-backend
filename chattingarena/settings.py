@@ -10,17 +10,7 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.1/ref/settings/
 """
 
-import os
 from pathlib import Path
-import dj_database_url
-from datetime import timedelta
-
-# Load environment variables from .env if present
-try:
-    from dotenv import load_dotenv
-    load_dotenv()
-except ImportError:
-    pass
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -30,12 +20,12 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/5.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = os.environ.get('SECRET_KEY', 'django-insecure-e)-eufxa4yo5vfz2a0%%v$^xq2&h-4tc)bimp+*kx$69av-1)5')
+SECRET_KEY = 'django-insecure-e)-eufxa4yo5vfz2a0%%v$^xq2&h-4tc)bimp+*kx$69av-1)5'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = 'RENDER' not in os.environ
+DEBUG = True
 
-ALLOWED_HOSTS = ['localhost', '127.0.0.1', 'chatting-backend-3mve.onrender.com', '192.168.0.101', '*']
+ALLOWED_HOSTS = ['localhost', '127.0.0.1', 'chatting-backend-3mve.onrender.com', '*']
 
 # CORS Configuration - Allow all for development/testing
 CORS_ALLOW_ALL_ORIGINS = True  # For production, restrict to specific origins
@@ -68,8 +58,6 @@ INSTALLED_APPS = [
     'rest_framework',
     'rest_framework.authtoken',
     'corsheaders',
-    'cloudinary_storage',
-    'cloudinary',
     
     # Local apps
     'accounts',
@@ -78,19 +66,16 @@ INSTALLED_APPS = [
 ]
 
 MIDDLEWARE = [
-    'corsheaders.middleware.CorsMiddleware',  # CORS must be first
-    'django.middleware.security.SecurityMiddleware',
-    'whitenoise.middleware.WhiteNoiseMiddleware', # Add Whitenoise for static files
-    'django.contrib.sessions.middleware.SessionMiddleware', # Required for Admin/Auth
+    'corsheaders.middleware.CorsMiddleware',  # CORS for WebSocket
     'django.middleware.common.CommonMiddleware',
-    'django.middleware.csrf.CsrfViewMiddleware',
-    'django.contrib.auth.middleware.AuthenticationMiddleware', # Adds request.user
-    'django.contrib.messages.middleware.MessageMiddleware', # Required for Admin
-    'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    # Removed sync-only middleware that breaks ASGI:
+    # - SecurityMiddleware (causes coroutine issues)
+    # - SessionMiddleware (not needed for API)
+    # - CsrfViewMiddleware (not needed for API with JWT)
+    # - AuthenticationMiddleware (using JWT tokens instead)
+    # - MessagesMiddleware (not needed for API)
+    # - ClickjackingMiddleware (not needed for API)
 ]
-
-# CSRF Configuration for Render
-CSRF_TRUSTED_ORIGINS = ['https://chatting-backend-3mve.onrender.com']
 
 ROOT_URLCONF = 'chattingarena.urls'
 
@@ -135,11 +120,10 @@ CHANNEL_LAYERS = {
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
 
 DATABASES = {
-    'default': dj_database_url.config(
-        default=f"sqlite:///{BASE_DIR / 'db.sqlite3'}",
-        conn_max_age=600,
-        conn_health_checks=True,
-    )
+    'default': {
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': BASE_DIR / 'db.sqlite3',
+    }
 }
 
 
@@ -211,11 +195,8 @@ REST_FRAMEWORK = {
 MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / 'media'
 
-# Cloudinary Configuration
-CLOUDINARY_STORAGE = {
-    'CLOUD_NAME': os.environ.get('CLOUDINARY_CLOUD_NAME'),
-    'API_KEY': os.environ.get('CLOUDINARY_API_KEY'),
-    'API_SECRET': os.environ.get('CLOUDINARY_API_SECRET'),
+from datetime import timedelta
+SIMPLE_JWT = {
+    'ACCESS_TOKEN_LIFETIME': timedelta(days=365),
+    'REFRESH_TOKEN_LIFETIME': timedelta(days=365),
 }
-
-DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
